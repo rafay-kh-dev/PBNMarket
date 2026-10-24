@@ -202,4 +202,17 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="mt-8 flex flex-wrap
+          className="mt-8 flex flex-wrap justify-center gap-5 text-xs text-slate-400 font-medium"
+        >
+          {[
+            "🔒 Discreet & Confidential",
+            "⚡ Links Live in 7 Days",
+            "♻️ Free Replacements",
+          ].map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}

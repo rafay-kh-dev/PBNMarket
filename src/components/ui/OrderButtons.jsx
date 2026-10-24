@@ -66,4 +66,4 @@ export const OrderButtons = ({ size = "default", className = "" }) => {
   );
 };
 
-export defaul
+export default OrderButtons;
