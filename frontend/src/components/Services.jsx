@@ -1,101 +1,109 @@
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Check, Sparkles, Clock, Globe, ArrowUpRight, ShieldCheck, Layers } from "lucide-react";
+import { Check, Sparkles, Globe, Clock, Layers } from "lucide-react";
 import { CONTACT } from "../data";
 
+// ─────────────────────────────────────────────────────────
+// CATEGORIES — 100% Visible on Mobile (2x2) & Desktop (Row)
+// ─────────────────────────────────────────────────────────
 const categories = [
-  { id: "Global Authority", label: "Global Authority", count: 4 },
-  { id: "Regional (.ID)", label: "Indonesian (.ID)", count: 3 },
-  { id: "Academic & Gov", label: "Academic & GOV", count: 3 },
-  { id: "Enterprise Bundles", label: "All-In-One Bundles", count: 3 },
+  { id: "Global Authority", label: "Global Authority", mobileLabel: "Global PBNs", count: 4 },
+  { id: "Regional (.ID)", label: "Indonesian (.ID)", mobileLabel: "Indonesian (.ID)", count: 3 },
+  { id: "Academic & Gov", label: "Academic & GOV", mobileLabel: "EDU & GOV", count: 3 },
+  { id: "Enterprise Bundles", label: "All-In-One Bundles", mobileLabel: "SEO Bundles", count: 3 },
 ];
 
+// ─────────────────────────────────────────────────────────
+// SERVICES DATA (Australian English)
+// ─────────────────────────────────────────────────────────
 const servicesData = [
   // ── Category 1: Global Authority ──
   {
     id: 1,
     category: "Global Authority",
-    badge: "#1 Flagship",
+    badge: "Flagship Outreach",
     title: "Editorial Guest Posting",
-    tag: "DA/DR 30+ to 50+ Free Choice",
+    tag: "DA/DR 30+ to 50+ • Real Organic Traffic",
     unitPrice: 15,
     unitLabel: "post",
     defaultQty: 5,
-    qtyOptions: [1, 5, 10, 25, 50, 100],
+    qtyOptions: [1, 5, 10, 25, 50],
     tiers: [
-      { label: "1K+ Traffic", price: 15 },
-      { label: "5K+ Traffic", price: 30 },
-      { label: "10K+ Traffic", price: 60 },
-      { label: "25K+ Traffic", price: 120 },
-      { label: "50K+ Traffic", price: 240 },
+      { label: "1K+ Traffic", short: "1K+", price: 15 },
+      { label: "5K+ Traffic", short: "5K+", price: 30 },
+      { label: "10K+ Traffic", short: "10K+", price: 60 },
+      { label: "25K+ Traffic", short: "25K+", price: 120 },
     ],
     desc: "Real authority placements with verified organic traffic. Customised outreach across General, SaaS, and iGaming niches with zero footprint risk.",
     tlds: ".COM • .NET • .ORG",
     turnaround: "5–7 Days",
     features: [
-      "Verified monthly organic traffic tiers (1K+ up to 50K+)",
-      "DA/DR 30+ to 50+ free authority selection included",
+      "Verified monthly organic traffic tiers (1K+ to 25K+)",
+      "DA/DR 30+ to 50+ free authority selection",
       "Bespoke human-written contextual editorial articles",
     ],
-    popular: true,
+    popular: false,
+    isFlagship: true,
+    orders: "1,500+",
   },
   {
     id: 2,
     category: "Global Authority",
-    badge: "Most Popular",
+    badge: "Best Seller",
     title: "Homepage PBN Post",
     tag: "Guaranteed DA/DR 50+",
     unitPrice: 1,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Publish niche-relevant, human-edited articles directly on the main homepage feed of aged, high-authority domains with zero footprints.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Publish niche-relevant, human-edited articles directly on the main homepage feed of aged, high-authority domains.",
     tlds: ".COM • .NET • .ORG",
     turnaround: "5–7 Days",
     features: [
-      "400–600 words unique contextual article per placement",
-      "Guaranteed Moz DA 50+ & Ahrefs DR 50+ vetted domains",
-      "100% Dofollow contextual link placement on homepage",
+      "400–600 words unique contextual article",
+      "Guaranteed Moz DA 50+ & Ahrefs DR 50+",
+      "100% Dofollow contextual link on homepage",
     ],
     popular: true,
+    orders: "2,400+",
   },
   {
     id: 3,
     category: "Global Authority",
-    badge: "High Link Juice",
+    badge: "Max Link Juice",
     title: "Sidebar Blogroll",
     tag: "Sitewide DA/DR 50+",
     unitPrice: 2,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Pass massive sitewide link equity from every indexed page of our aged DA/DR 50+ domains directly to your money site to accelerate Domain Rating.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Pass massive sitewide link equity from every indexed page of our aged DA/DR 50+ domains directly to your money site.",
     tlds: ".COM • .NET • .ORG",
     turnaround: "3–5 Days",
     features: [
-      "Sitewide homepage & inner-page authority transfer",
-      "Strictly capped outbound link (OBL) ratio (<15 links)",
-      "Instant Googlebot discovery & rapid indexing",
+      "Sitewide homepage & inner-page authority",
+      "Strictly capped outbound links (OBL <15)",
+      "Instant Googlebot discovery & indexing",
     ],
     popular: false,
   },
   {
     id: 4,
     category: "Global Authority",
-    badge: "Pinned Top",
+    badge: "Permanent Spot",
     title: "Homepage Sticky Post",
     tag: "Locked Top Slot • DR 50+",
     unitPrice: 2,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Lock your contextual article permanently at the very top of our DA/DR 50+ homepages so your placement never rolls off into inner pagination.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Lock your contextual article permanently at the very top of our DA/DR 50+ homepages so it never rolls off.",
     tlds: ".COM • .NET • .ORG",
     turnaround: "5–7 Days",
     features: [
-      "Permanently pinned in the top homepage slot",
-      "Maximum homepage crawl priority & link juice",
-      "500+ word niche article with customised anchor text",
+      "Permanently pinned in top homepage slot",
+      "Maximum homepage crawl priority",
+      "500+ word niche article with custom anchors",
     ],
     popular: false,
   },
@@ -104,22 +112,23 @@ const servicesData = [
   {
     id: 5,
     category: "Regional (.ID)",
-    badge: "Regional .ID",
+    badge: "Most Ordered",
     title: ".ID Homepage Post",
     tag: "Indonesian DA/DR 50+",
     unitPrice: 2,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Dominate Google.co.id and Southeast Asian SERPs with contextual homepage articles published on aged, authoritative Indonesian country-code domains.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Dominate Google.co.id and Southeast Asian SERPs with contextual homepage articles on authoritative Indonesian domains.",
     tlds: ".ID • .CO.ID • .WEB.ID",
     turnaround: "5–7 Days",
     features: [
-      "Native Bahasa Indonesia or English contextual articles",
-      "Aged .ID, .CO.ID, .WEB.ID & .OR.ID domains",
-      "Geo-targeted Indonesian & Singaporean hosting IPs",
+      "Native Bahasa Indonesia or English articles",
+      "Aged .ID, .CO.ID, .WEB.ID domains",
+      "Geo-targeted Indonesian hosting IPs",
     ],
     popular: true,
+    orders: "1,800+",
   },
   {
     id: 6,
@@ -130,34 +139,34 @@ const servicesData = [
     unitPrice: 3,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Push competitive Indonesian keywords into the Top 3 with sitewide blogroll placements across our highest-authority .ID and .CO.ID domains.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Push competitive Indonesian keywords into the Top 3 with sitewide blogroll placements across high-authority .ID domains.",
     tlds: ".ID • .CO.ID • .OR.ID",
     turnaround: "3–5 Days",
     features: [
-      "Direct homepage & sitewide .ID link equity",
-      "Geo-targeted Indonesian Class-C IP distribution",
-      "Strong regional trust signals for Google.co.id",
+      "Direct homepage & sitewide .ID equity",
+      "Geo-targeted Indonesian Class-C IPs",
+      "Strong regional trust signals",
     ],
     popular: false,
   },
   {
     id: 7,
     category: "Regional (.ID)",
-    badge: "Pinned .ID",
+    badge: "Permanent .ID",
     title: ".ID Sticky Post",
     tag: "Pinned Top • DA/DR 50+",
     unitPrice: 2.5,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Combine contextual relevance with permanent top-of-homepage positioning across aged DA/DR 50+ Indonesian (.ID / .CO.ID) domains.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Combine contextual relevance with permanent top-of-homepage positioning across aged DA/DR 50+ Indonesian domains.",
     tlds: ".ID • .CO.ID • .WEB.ID",
     turnaround: "5–7 Days",
     features: [
-      "Locked top-of-homepage .ID contextual placement",
-      "Unique Bahasa Indonesia or English niche article",
-      "Safe drip-feed publishing schedule available",
+      "Locked top-of-homepage .ID placement",
+      "Unique Bahasa Indonesia or English article",
+      "Safe drip-feed publishing schedule",
     ],
     popular: false,
   },
@@ -172,13 +181,13 @@ const servicesData = [
     unitPrice: 3,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [25, 50, 100, 250, 500, 1000],
-    desc: "Skyrocket your E-E-A-T signals, AI Overview citations, and Domain Rating with contextual articles published on aged educational domains.",
+    qtyOptions: [25, 50, 100, 250, 500],
+    desc: "Skyrocket your E-E-A-T signals, AI Overview citations, and Domain Rating with articles on aged educational domains.",
     tlds: ".EDU • .AC.ID • .SCH.ID",
     turnaround: "5–7 Days",
     features: [
-      "Contextual article on aged .EDU & academic domains",
-      "Massive boost to Ahrefs DR & institutional trust",
+      "Contextual article on aged .EDU domains",
+      "Massive boost to Ahrefs DR & trust",
       "Natural anchor text & citation integration",
     ],
     popular: false,
@@ -186,40 +195,41 @@ const servicesData = [
   {
     id: 9,
     category: "Academic & Gov",
-    badge: "Max Authority",
+    badge: "Top Pick",
     title: "EDU PBN Blogroll",
     tag: "University Sidebar • DR 50+",
     unitPrice: 5,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [25, 50, 100, 250, 500, 1000],
-    desc: "University and academic sidebar placements delivering massive sitewide institutional authority to push ultra-competitive keywords into the Top 3.",
+    qtyOptions: [25, 50, 100, 250, 500],
+    desc: "University and academic sidebar placements delivering massive sitewide institutional authority to push competitive keywords.",
     tlds: ".EDU • .AC.ID • .SCH.ID",
     turnaround: "3–5 Days",
     features: [
-      "Sitewide academic sidebar link equity transfer",
+      "Sitewide academic sidebar link equity",
       "High-trust institutional backlink profile",
-      "Built for Finance, SaaS, iGaming, Crypto & E-Com",
+      "Built for Finance, SaaS, iGaming, Crypto",
     ],
     popular: true,
+    orders: "950+",
   },
   {
     id: 10,
     category: "Academic & Gov",
-    badge: "Exclusive Tier",
+    badge: "Ultra Premium",
     title: "EDU & GOV Backlink",
     tag: "DA 50–85+ Official Trust",
     unitPrice: 20,
     unitLabel: "link",
     defaultQty: 25,
     qtyOptions: [10, 25, 50, 100, 250],
-    desc: "Ultra-high-trust placements on official academic (.AC.ID, .SCH.ID) and government (.GO.ID) properties with competitor-proof stealth integration.",
+    desc: "Ultra-high-trust placements on official academic and government properties with competitor-proof stealth integration.",
     tlds: ".AC.ID • .SCH.ID • .GO.ID",
     turnaround: "5–7 Days",
     features: [
       "Authentic .AC.ID, .SCH.ID & .GO.ID extensions",
       "Competitor-proof stealth link integration",
-      "Unmatched institutional trust & AI citation weight",
+      "Unmatched institutional trust weight",
     ],
     popular: false,
   },
@@ -235,126 +245,406 @@ const servicesData = [
     unitLabel: "link",
     defaultQty: 50,
     qtyOptions: [50, 100, 250, 500, 1000],
-    desc: "A diversified, done-for-you authority campaign combining Standard PBN Homepage Posts, Sitewide Blogrolls, and High-Trust EDU placements into one balanced profile.",
+    desc: "A diversified, done-for-you authority campaign combining Standard PBN Homepage Posts, Sitewide Blogrolls, and High-Trust EDU placements.",
     tlds: ".COM • .ID • .EDU Mix",
     turnaround: "5–7 Days",
     features: [
-      "Balanced mix of Homepage, Sticky & EDU placements",
-      "Natural anchor text diversification (Branded, Exact, Partial)",
-      "Drip-feed velocity tailored to your domain age",
+      "Balanced mix of Homepage, Sticky & EDU",
+      "Natural anchor text diversification",
+      "Drip-feed velocity tailored to your domain",
     ],
     popular: false,
   },
   {
     id: 12,
     category: "Enterprise Bundles",
-    badge: "Page 1 Power",
+    badge: "Recommended",
     title: "Rank on First Page",
     tag: "DR 50–80+ Powerhouse",
     unitPrice: 8,
     unitLabel: "link",
     defaultQty: 50,
     qtyOptions: [50, 100, 250, 500, 1000],
-    desc: "Engineered for stubborn keywords stuck on Page 2 or Page 3. Combines our highest-metric Pinned Sticky Posts, EDU Blogrolls, and Institutional links.",
+    desc: "Engineered for stubborn keywords stuck on Page 2 or Page 3. Combines our highest-metric Sticky Posts and Institutional links.",
     tlds: ".COM • .EDU • .AC.ID • .GO.ID",
     turnaround: "5–7 Days",
     features: [
-      "Priority placement on our highest-DR (DR 60–80+) domains",
-      "Includes Pinned Sticky Posts + EDU/GOV institutional links",
-      "Competitor gap analysis & anchor velocity planning",
+      "Priority placement on our highest-DR domains",
+      "Includes Pinned Sticky Posts + EDU/GOV links",
+      "Competitor gap analysis & planning included",
     ],
     popular: true,
+    orders: "1,200+",
   },
   {
     id: 13,
     category: "Enterprise Bundles",
-    badge: "Enterprise Custom",
+    badge: "Agency Custom",
     title: "Custom SEO Solutions",
     tag: "Multi-Client Agency Split",
     unitPrice: 4,
     unitLabel: "link",
     defaultQty: 50,
-    qtyOptions: [50, 100, 250, 500, 1000, 2500],
-    desc: "Need customised drip-feed schedules, specific country TLDs, multi-client agency splitting, or bespoke anchor ratios? Configure your allocation below.",
+    qtyOptions: [50, 100, 250, 500, 1000],
+    desc: "Need customised drip-feed schedules, specific country TLDs, multi-client splitting, or bespoke anchor ratios? Configure allocation below.",
     tlds: "Custom TLD & Geo Selection",
     turnaround: "3–7 Days",
     features: [
-      "Split link volume across unlimited client domains",
-      "Customised geo-targeting (Global .COM, .ID, or EDU)",
-      "Flexible drip-feed schedules from 3 days to 30 days",
+      "Split link volume across unlimited clients",
+      "Customised geo-targeting (.COM, .ID, EDU)",
+      "Flexible drip-feed schedules (3 to 30 days)",
     ],
     popular: false,
   },
 ];
 
-export const Services = () => {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+// ─────────────────────────────────────────────────────────
+// INLINE BRAND SVGS
+// ─────────────────────────────────────────────────────────
+const WhatsAppIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
 
-  const [activeCategory, setActiveCategory] = useState(categories[0].id);
-  const [selectedServiceId, setSelectedServiceId] = useState(servicesData[0].id);
-  const [selectedQty, setSelectedQty] = useState(servicesData[0].defaultQty);
-  const [selectedTierIdx, setSelectedTierIdx] = useState(0);
+const TelegramIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M21.9 2.6c-.4-.3-1-.4-1.6-.2L2.4 9.3c-.7.3-1.2.9-1.1 1.6.1.7.6 1.2 1.3 1.4l4.6 1.4 10.6-6.7c.2-.1.5 0 .6.2.1.2 0 .4-.1.6l-8.6 7.8v4.6c0 .6.4 1.1 1 1.3.5.1 1.1-.1 1.4-.5l2.6-3.1 4.8 3.5c.4.3.9.4 1.4.2.5-.2.8-.6.9-1.2L22.6 4c.1-.6-.2-1.1-.7-1.4z" />
+  </svg>
+);
 
-  const categoryServices = servicesData.filter((s) => s.category === activeCategory);
-  const activeService = servicesData.find((s) => s.id === selectedServiceId) || categoryServices[0];
+// ─────────────────────────────────────────────────────────
+// ARCHITECTURAL SERVICE CARD (Zero Accordion Jump, Clear Math)
+// ─────────────────────────────────────────────────────────
+const ServiceCard = ({ service }) => {
+  const [qty, setQty] = useState(service.defaultQty);
+  const [tierIdx, setTierIdx] = useState(0);
+  const [showCustom, setShowCustom] = useState(false);
+  const [customQtyInput, setCustomQtyInput] = useState("");
 
-  const handleCategoryChange = (catId) => {
-    setActiveCategory(catId);
-    const firstInCat = servicesData.find((s) => s.category === catId);
-    if (firstInCat) {
-      setSelectedServiceId(firstInCat.id);
-      setSelectedQty(firstInCat.defaultQty);
-      setSelectedTierIdx(0);
-    }
-  };
-
-  const handleServiceSelect = (service) => {
-    setSelectedServiceId(service.id);
-    setSelectedQty(service.defaultQty);
-    setSelectedTierIdx(0);
-  };
-
-  const activeUnitPrice = activeService.tiers
-    ? activeService.tiers[selectedTierIdx]?.price || activeService.unitPrice
-    : activeService.unitPrice;
-
-  const subtotal = (activeUnitPrice * selectedQty).toLocaleString("en-US", {
+  const activeUnitPrice = service.tiers ? service.tiers[tierIdx].price : service.unitPrice;
+  const subtotal = (activeUnitPrice * qty).toLocaleString("en-US", {
     minimumFractionDigits: activeUnitPrice % 1 !== 0 ? 2 : 0,
     maximumFractionDigits: 2,
   });
 
-  const orderSummaryText = encodeURIComponent(
-    `Hi PBNMarket Team! I'd like to configure a campaign:\n\n` +
-    `• Service: ${activeService.title} (${activeService.tag})\n` +
-    (activeService.tiers ? `• Tier: ${activeService.tiers[selectedTierIdx].label}\n` : ``) +
-    `• Quantity: ${selectedQty} ${activeService.unitLabel}s\n` +
-    `• Estimated Total: $${subtotal} USD\n\n` +
+  const orderMessage = encodeURIComponent(
+    `Hi PBNMarket Team! I'd like to order:\n\n` +
+    `• Package: ${service.title}\n` +
+    (service.tiers ? `• Tier: ${service.tiers[tierIdx].label}\n` : ``) +
+    `• Quantity: ${qty} ${service.unitLabel}s\n` +
+    `• Rate: $${activeUnitPrice}/${service.unitLabel}\n` +
+    `• Total: $${subtotal} USD\n\n` +
     `Please share the next steps.`
   );
 
   const whatsappUrl = CONTACT.whatsapp.includes("?")
-    ? `${CONTACT.whatsapp}&text=${orderSummaryText}`
-    : `${CONTACT.whatsapp}?text=${orderSummaryText}`;
+    ? `${CONTACT.whatsapp}&text=${orderMessage}`
+    : `${CONTACT.whatsapp}?text=${orderMessage}`;
+
+  const handlePreset = (q) => {
+    setQty(q);
+    setShowCustom(false);
+  };
+
+  const handleCustomQty = (val) => {
+    setCustomQtyInput(val);
+    const num = parseInt(val, 10);
+    if (num > 0) setQty(num);
+  };
+
+  // Flagship horizontal spotlight layout on Desktop (solves 4 vs 3 grid symmetry!)
+  const isFlagship = service.isFlagship;
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`group relative bg-white rounded-[24px] sm:rounded-[28px] p-5 sm:p-7 transition-all duration-300 ${
+        isFlagship
+          ? "lg:col-span-3 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-center shadow-[0_10px_35px_-12px_rgba(0,0,0,0.06)] ring-1 ring-slate-200/90 hover:ring-red-200"
+          : "flex flex-col justify-between"
+      } ${
+        service.popular
+          ? "shadow-[0_14px_40px_-12px_rgba(220,38,38,0.16)] ring-2 ring-red-500"
+          : !isFlagship
+          ? "shadow-[0_4px_20px_-8px_rgba(0,0,0,0.05)] ring-1 ring-slate-200/90 hover:shadow-[0_14px_34px_-10px_rgba(0,0,0,0.08)] hover:ring-slate-300"
+          : ""
+      }`}
+    >
+      {/* Top Red Accent Line on Popular / Flagship */}
+      {(service.popular || isFlagship) && (
+        <div className="absolute top-0 inset-x-8 h-[2.5px] bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full" />
+      )}
+
+      {/* ══════════════════════════════════════════════════
+          UPPER / LEFT ZONE — Service Identity & Deliverables
+         ══════════════════════════════════════════════════ */}
+      <div className={isFlagship ? "lg:col-span-7 lg:pr-4" : ""}>
+        
+        {/* Badge Row + Social Proof */}
+        <div className="flex items-center justify-between gap-2 mb-3.5">
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${
+              service.popular || isFlagship
+                ? "bg-red-50 text-red-600 border-red-100"
+                : "bg-slate-50 text-slate-500 border-slate-200/80"
+            }`}
+          >
+            {(service.popular || isFlagship) && <Sparkles className="w-3 h-3" />}
+            {service.badge}
+          </span>
+
+          {service.orders && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[10px] font-bold">
+              ✓ {service.orders} ordered
+            </span>
+          )}
+        </div>
+
+        {/* Title + Prominent Unit Price Pill (Instant Clarity) */}
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div>
+            <h3 className="text-[20px] sm:text-[22px] font-sora font-extrabold text-slate-800 tracking-tight leading-snug">
+              {service.title}
+            </h3>
+            <span className="text-[11.5px] font-semibold text-red-600/90 block mt-0.5">
+              {service.tag}
+            </span>
+          </div>
+
+          <div className="text-right bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70 shrink-0">
+            <div className="flex items-baseline justify-end gap-0.5">
+              <span className="text-[20px] sm:text-[22px] font-extrabold text-slate-800 tracking-tight leading-none">
+                ${activeUnitPrice}
+              </span>
+              <span className="text-[11px] font-bold text-slate-400">
+                /{service.unitLabel}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Concise Description */}
+        <p className="text-[13px] sm:text-[13.5px] text-slate-500 font-medium leading-relaxed mt-2.5 mb-4">
+          {service.desc}
+        </p>
+
+        {/* TLD + Turnaround Micro-Chips */}
+        <div className="flex flex-wrap items-center gap-1.5 mb-4">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/60 text-[10.5px] font-bold text-slate-600 uppercase tracking-wider">
+            <Globe className="w-3 h-3 text-red-500" /> {service.tlds}
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/60 text-[10.5px] font-bold text-slate-600 uppercase tracking-wider">
+            <Clock className="w-3 h-3 text-red-500" /> {service.turnaround}
+          </span>
+        </div>
+
+        {/* 3 Core Deliverables */}
+        <ul className={`space-y-2 mb-5 ${isFlagship ? "lg:mb-0 lg:grid lg:grid-cols-3 lg:gap-3 lg:space-y-0 lg:pt-2" : ""}`}>
+          {service.features.map((feat, i) => (
+            <li
+              key={i}
+              className={`flex items-start gap-2 text-[12.5px] sm:text-[13px] font-medium text-slate-700 leading-snug ${
+                isFlagship ? "lg:bg-slate-50/70 lg:p-2.5 lg:rounded-xl lg:border lg:border-slate-100" : ""
+              }`}
+            >
+              <span className="w-4 h-4 rounded-full bg-red-50 border border-red-100 flex items-center justify-center shrink-0 mt-0.5">
+                <Check className="w-2.5 h-2.5 text-red-600 stroke-[3]" />
+              </span>
+              <span>{feat}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* ══════════════════════════════════════════════════
+          RECESSED CONFIGURATOR DOCK — Configure & Order
+         ══════════════════════════════════════════════════ */}
+      <div
+        className={`${
+          isFlagship ? "lg:col-span-5" : "mt-auto"
+        } bg-[#FAFAFA] rounded-2xl p-3.5 sm:p-4 border border-slate-200/80 flex flex-col gap-3.5`}
+      >
+        {/* Optional Traffic Tier Selector */}
+        {service.tiers && (
+          <div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 mb-1.5">
+              <Layers className="w-3 h-3 text-red-500" />
+              1. Select Monthly Organic Traffic Tier
+            </div>
+            <div className="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200/80">
+              {service.tiers.map((tier, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setTierIdx(idx)}
+                  className={`py-1.5 rounded-lg text-center transition-all flex flex-col items-center ${
+                    tierIdx === idx
+                      ? "bg-red-600 text-white shadow-sm"
+                      : "text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <span className="text-[11px] font-bold leading-none">{tier.short}</span>
+                  <span
+                    className={`text-[9.5px] font-semibold mt-0.5 leading-none ${
+                      tierIdx === idx ? "text-red-100" : "text-slate-400"
+                    }`}
+                  >
+                    ${tier.price}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quantity Selector Pills */}
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              {service.tiers ? "2. Select Quantity" : "Select Quantity"} ({service.unitLabel}s)
+            </span>
+            <span className="text-[10.5px] font-bold text-slate-500">
+              {qty} × ${activeUnitPrice}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-6 gap-1">
+            {service.qtyOptions.map((q) => (
+              <button
+                key={q}
+                type="button"
+                onClick={() => handlePreset(q)}
+                className={`py-1.5 rounded-lg text-[11.5px] font-bold transition-all outline-none border ${
+                  !showCustom && qty === q
+                    ? "bg-red-600 border-red-600 text-white shadow-sm"
+                    : "bg-white border-slate-200/90 text-slate-600 hover:border-slate-300"
+                }`}
+              >
+                {q >= 1000 ? `${q / 1000}k` : q}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => {
+                setShowCustom(true);
+                setCustomQtyInput("");
+              }}
+              className={`py-1.5 rounded-lg text-[10.5px] font-bold transition-all outline-none border ${
+                showCustom
+                  ? "bg-red-600 border-red-600 text-white shadow-sm"
+                  : "bg-white border-slate-200/90 text-slate-500 hover:border-slate-300"
+              }`}
+            >
+              Custom
+            </button>
+          </div>
+
+          {showCustom && (
+            <input
+              type="number"
+              min="1"
+              value={customQtyInput}
+              onChange={(e) => handleCustomQty(e.target.value)}
+              placeholder={`Enter custom ${service.unitLabel} quantity...`}
+              autoFocus
+              className="mt-2 w-full px-3 py-1.5 rounded-lg border border-red-300 bg-white text-[12px] font-semibold text-slate-800 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-red-200"
+            />
+          )}
+        </div>
+
+        {/* Live Calculation Bar + Side-by-Side CTAs */}
+        <div className="pt-2.5 border-t border-slate-200/70 flex flex-col gap-2.5">
+          <div className="flex items-baseline justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">
+              Total ({qty} {service.unitLabel}{qty > 1 ? "s" : ""})
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-[26px] sm:text-[28px] font-extrabold text-slate-800 tracking-tight leading-none">
+                ${subtotal}
+              </span>
+              <span className="text-[10.5px] font-bold text-slate-400 uppercase">USD</span>
+            </div>
+          </div>
+
+          {/* Side-by-Side CTAs on ALL screens (Clean, compact, zero vertical bloat) */}
+          <div className="grid grid-cols-2 gap-2">
+            <a
+              href={CONTACT.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/btn h-[42px] sm:h-[44px] flex items-center justify-center gap-1.5 bg-gradient-to-b from-red-500 to-[#B91C1C] hover:from-red-600 hover:to-[#991b1b] text-white text-[12.5px] font-bold rounded-xl shadow-[0_4px_12px_rgba(220,38,38,0.22)] transition-all duration-200 whitespace-nowrap"
+            >
+              <TelegramIcon className="w-3.5 h-3.5 shrink-0 group-hover/btn:-translate-y-0.5 transition-transform" />
+              <span>Telegram</span>
+            </a>
+
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/btn h-[42px] sm:h-[44px] flex items-center justify-center gap-1.5 bg-white hover:bg-emerald-50/40 border border-slate-200/90 hover:border-emerald-300 text-slate-700 hover:text-emerald-700 text-[12.5px] font-bold rounded-xl shadow-sm transition-all duration-200 whitespace-nowrap"
+            >
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366] shrink-0 group-hover/btn:scale-110 transition-transform" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────
+// MAIN SERVICES SECTION
+// ─────────────────────────────────────────────────────────
+export const Services = () => {
+  const sectionRef = useRef(null);
+  const gridTopRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+  const [activeTab, setActiveTab] = useState(categories[0].id);
+
+  const handleTabChange = (catId) => {
+    setActiveTab(catId);
+    // Smoothly align viewport to the top of the cards if user is scrolled down
+    if (gridTopRef.current) {
+      const rect = gridTopRef.current.getBoundingClientRect();
+      if (rect.top < 80) {
+        window.scrollTo({
+          top: window.scrollY + rect.top - 110,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  const displayedServices = servicesData.filter((s) => s.category === activeTab);
 
   return (
     <section
       ref={sectionRef}
       id="services"
-      className="relative w-full bg-[#FAFAFA] px-4 sm:px-6 pt-10 lg:pt-12 pb-16 lg:pb-24 overflow-hidden selection:bg-red-100 selection:text-red-900"
+      className="relative w-full bg-[#FAFAFA] px-4 sm:px-6 pt-12 lg:pt-16 pb-20 lg:pb-28 selection:bg-red-100 selection:text-red-900"
     >
-      {/* Subtle Background Radial Glow */}
-      <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[1100px] h-[550px] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.04)_0%,transparent_70%)] z-0" />
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-[0.25]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] min-w-[1000px] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.035)_0%,transparent_60%)]" />
+      </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-[1280px] mx-auto">
         
         {/* ── Section Heading ── */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[32px] sm:text-[44px] md:text-[52px] font-sora font-extrabold text-slate-900 tracking-[-0.03em] leading-[1.08]"
+            className="text-[32px] sm:text-[48px] md:text-[56px] font-sora font-extrabold text-slate-800 tracking-[-0.03em] leading-[1.08]"
           >
             The ultimate catalogue.<br className="hidden sm:block" />
             Built for{" "}
@@ -362,46 +652,46 @@ export const Services = () => {
               scale.
             </span>
           </motion.h2>
-
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-3 sm:mt-4 text-[14.5px] sm:text-[16px] text-slate-500 font-medium leading-relaxed"
+            className="mt-3 sm:mt-4 text-[14px] sm:text-[17px] text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto"
           >
-            Configure your customised link allocation below and connect with our campaign engineers on Telegram or WhatsApp for instant deployment.
+            Choose a network category below, select your link volume inside any package, and launch your campaign via Telegram or WhatsApp.
           </motion.p>
         </div>
 
-        {/* ── Category Pill Tabs ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex justify-start sm:justify-center mb-6 sm:mb-9 overflow-x-auto no-scrollbar pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0"
-        >
-          <div className="inline-flex items-center gap-1.5 p-1.5 bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/80 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] shrink-0">
+        {/* ── STICKY ZERO-SWIPE CATEGORY DOCK (2x2 on Mobile, 1x4 Pill Bar on Desktop) ── */}
+        <div className="sticky top-3 sm:top-5 z-50 mb-7 sm:mb-10 flex justify-center">
+          <div className="w-full sm:w-auto grid grid-cols-2 sm:inline-flex gap-1.5 p-1.5 bg-white/85 backdrop-blur-2xl rounded-2xl sm:rounded-[20px] border border-slate-200/80 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)]">
             {categories.map((cat) => {
-              const isActive = activeCategory === cat.id;
+              const isActive = activeTab === cat.id;
               return (
                 <button
                   key={cat.id}
-                  onClick={() => handleCategoryChange(cat.id)}
-                  className={`relative flex items-center gap-2 px-4 sm:px-5 py-2 rounded-xl text-[13px] sm:text-[14px] font-semibold transition-colors duration-200 whitespace-nowrap outline-none ${
-                    isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
+                  type="button"
+                  onClick={() => handleTabChange(cat.id)}
+                  className={`relative flex items-center justify-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl sm:rounded-[14px] text-[12.5px] sm:text-[14px] font-bold transition-all duration-200 outline-none ${
+                    isActive
+                      ? "text-white"
+                      : "text-slate-600 hover:text-slate-800 hover:bg-slate-50/80"
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeCategoryPill"
-                      className="absolute inset-0 bg-gradient-to-b from-red-500 to-[#B91C1C] rounded-xl shadow-[0_4px_12px_rgba(220,38,38,0.3)]"
+                      className="absolute inset-0 bg-gradient-to-b from-red-500 to-[#B91C1C] rounded-xl sm:rounded-[14px] shadow-[0_4px_12px_rgba(220,38,38,0.28)]"
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
-                  <span className="relative z-10">{cat.label}</span>
+                  <span className="relative z-10 sm:hidden truncate">{cat.mobileLabel}</span>
+                  <span className="relative z-10 hidden sm:inline">{cat.label}</span>
                   <span
-                    className={`relative z-10 text-[11px] px-1.5 py-0.5 rounded-md font-bold ${
-                      isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
+                    className={`relative z-10 text-[10px] px-1.5 py-0.5 rounded-md font-extrabold leading-none ${
+                      isActive
+                        ? "bg-white/20 text-white"
+                        : "bg-slate-100 text-slate-500"
                     }`}
                   >
                     {cat.count}
@@ -410,434 +700,22 @@ export const Services = () => {
               );
             })}
           </div>
+        </div>
+
+        {/* Scroll Anchor Target */}
+        <div ref={gridTopRef} />
+
+        {/* ── UNIFIED 3-COLUMN ARCHITECTURAL GRID ── */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7"
+        >
+          <AnimatePresence mode="popLayout">
+            {displayedServices.map((service) => (
+              <ServiceCard key={service.id} service={service} />
+            ))}
+          </AnimatePresence>
         </motion.div>
-
-        {/* ══════════════════════════════════════════════════════════════════
-            DESKTOP & LAPTOP: COMPACT SPLIT-SCREEN SHOWROOM (Fits 100% on Screen)
-           ══════════════════════════════════════════════════════════════════ */}
-        <div className="hidden lg:grid lg:grid-cols-12 gap-6 xl:gap-8 items-stretch">
-          
-          {/* ── LEFT COLUMN (5 Cols): Service Selector List ── */}
-          <div className="col-span-5 flex flex-col justify-between gap-3">
-            <div className="flex flex-col gap-3">
-              <AnimatePresence mode="popLayout">
-                {categoryServices.map((service, idx) => {
-                  const isSelected = activeService.id === service.id;
-                  return (
-                    <motion.button
-                      key={service.id}
-                      initial={{ opacity: 0, x: -15 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -15 }}
-                      transition={{ duration: 0.25, delay: idx * 0.04 }}
-                      onClick={() => handleServiceSelect(service)}
-                      className={`group relative w-full text-left p-4 xl:p-5 rounded-[22px] transition-all duration-300 outline-none overflow-hidden ${
-                        isSelected
-                          ? "bg-white shadow-[0_12px_30px_-10px_rgba(220,38,38,0.14)] ring-2 ring-red-500"
-                          : "bg-white/75 hover:bg-white shadow-[0_2px_10px_-4px_rgba(0,0,0,0.04)] ring-1 ring-slate-200/80 hover:ring-slate-300"
-                      }`}
-                    >
-                      {isSelected && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-red-500 to-[#B91C1C]" />
-                      )}
-
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span
-                              className={`inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap ${
-                                isSelected || service.popular
-                                  ? "bg-red-50 text-red-600 border border-red-100"
-                                  : "bg-slate-100 text-slate-500"
-                              }`}
-                            >
-                              {service.popular && <Sparkles className="w-2.5 h-2.5" />}
-                              {service.badge}
-                            </span>
-                            <span className="text-[11px] font-semibold text-slate-400 truncate">
-                              {service.tag}
-                            </span>
-                          </div>
-
-                          <div className="text-[16px] xl:text-[17px] font-sora font-bold text-slate-900 group-hover:text-red-600 transition-colors truncate">
-                            {service.title}
-                          </div>
-                        </div>
-
-                        <div className="text-right shrink-0 pl-2">
-                          <div className="text-[20px] xl:text-[22px] font-extrabold text-slate-900 tracking-tight leading-none">
-                            ${service.unitPrice}
-                          </div>
-                          <div className="text-[10.5px] font-semibold text-slate-400 mt-1">
-                            per {service.unitLabel}
-                          </div>
-                        </div>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-              </AnimatePresence>
-            </div>
-
-            {/* Agency Trust Note */}
-            <div className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/70 border border-slate-200/70 text-[12px] font-medium text-slate-500">
-              <ShieldCheck className="w-4 h-4 text-red-500 shrink-0" />
-              <span>100% replacement guarantee & white-label agency reporting.</span>
-            </div>
-          </div>
-
-          {/* ── RIGHT COLUMN (7 Cols): Compact Full-View Configurator Card ── */}
-          <div className="col-span-7 flex">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeService.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full flex flex-col justify-between bg-white rounded-[28px] p-6 xl:p-8 shadow-[0_16px_50px_-15px_rgba(0,0,0,0.07)] ring-1 ring-slate-200/80 overflow-hidden"
-              >
-                {/* Top Crimson Accent Line */}
-                <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-transparent via-red-500 to-transparent" />
-
-                <div>
-                  {/* Header + Unit Rate */}
-                  <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-50 border border-red-100 text-[10.5px] font-bold text-red-600 uppercase tracking-wider">
-                          <Sparkles className="w-3 h-3" />
-                          {activeService.badge}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-[11px] font-semibold text-slate-600">
-                          <Globe className="w-3 h-3 text-red-500" />
-                          {activeService.tlds}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-[11px] font-semibold text-slate-600">
-                          <Clock className="w-3 h-3 text-red-500" />
-                          {activeService.turnaround}
-                        </span>
-                      </div>
-
-                      <h3 className="text-[22px] xl:text-[26px] font-sora font-extrabold text-slate-900 tracking-tight leading-tight">
-                        {activeService.title}
-                      </h3>
-                    </div>
-
-                    <div className="text-right bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/60 shrink-0">
-                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        Unit Rate
-                      </div>
-                      <div className="flex items-baseline justify-end gap-0.5 mt-0.5">
-                        <span className="text-[22px] xl:text-[24px] font-extrabold text-slate-900 tracking-tight leading-none">
-                          ${activeUnitPrice}
-                        </span>
-                        <span className="text-[12px] font-semibold text-slate-500">
-                          /{activeService.unitLabel}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="mt-3.5 text-[13.5px] xl:text-[14.5px] text-slate-600 font-medium leading-relaxed">
-                    {activeService.desc}
-                  </p>
-
-                  {/* Compact Deliverables List */}
-                  <div className="mt-4 grid grid-cols-1 gap-2">
-                    {activeService.features.map((feat, i) => (
-                      <div key={i} className="flex items-center gap-2.5 text-[13px] xl:text-[13.5px] font-medium text-slate-700">
-                        <span className="w-4.5 h-4.5 rounded-full bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-red-600 stroke-[2.5]" />
-                        </span>
-                        {feat}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Optional Traffic Tier Selector (Editorial Guest Posting) */}
-                  {activeService.tiers && (
-                    <div className="mt-4 pt-3.5 border-t border-slate-100">
-                      <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                        <Layers className="w-3.5 h-3.5 text-red-500" />
-                        Select Verified Monthly Traffic Tier
-                      </div>
-                      <div className="grid grid-cols-5 gap-1.5">
-                        {activeService.tiers.map((tier, idx) => (
-                          <button
-                            key={tier.label}
-                            onClick={() => setSelectedTierIdx(idx)}
-                            className={`py-1.5 px-1.5 rounded-xl text-center border transition-all ${
-                              selectedTierIdx === idx
-                                ? "bg-red-50/90 border-red-500 text-red-700 font-bold shadow-sm"
-                                : "bg-slate-50/70 border-slate-200/70 text-slate-600 hover:bg-white font-medium"
-                            }`}
-                          >
-                            <div className="text-[11.5px] leading-tight">{tier.label.split(" ")[0]}</div>
-                            <div className="text-[10px] opacity-80">${tier.price}/post</div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Quantity Selector */}
-                  <div className="mt-4 pt-3.5 border-t border-slate-100">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                        Select Campaign Volume ({activeService.unitLabel}s)
-                      </span>
-                      <span className="text-[11px] font-semibold text-red-600">
-                        Instant Agency Allocation
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-6 gap-2">
-                      {activeService.qtyOptions.map((qty) => {
-                        const isQtySelected = selectedQty === qty;
-                        return (
-                          <button
-                            key={qty}
-                            onClick={() => setSelectedQty(qty)}
-                            className={`py-2 rounded-xl text-[13px] font-bold transition-all duration-200 border ${
-                              isQtySelected
-                                ? "bg-gradient-to-b from-red-500 to-[#B91C1C] text-white border-red-600 shadow-[0_3px_10px_rgba(220,38,38,0.25)]"
-                                : "bg-slate-50 hover:bg-white text-slate-700 border-slate-200/80"
-                            }`}
-                          >
-                            {qty >= 1000 ? `${qty / 1000}k` : qty}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* ── FIXED CONVERSION BAR (Zero Text Wrapping, Identical 48px Button Heights) ── */}
-                <div className="mt-5 p-4 xl:px-5 xl:py-4 rounded-2xl bg-[#FAFAFA] border border-slate-200/80 flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
-                      Campaign Total ({selectedQty} {activeService.unitLabel}s)
-                    </div>
-                    <div className="flex items-baseline gap-1.5 mt-0.5">
-                      <span className="text-[28px] xl:text-[32px] font-extrabold text-slate-900 tracking-tight leading-none">
-                        ${subtotal}
-                      </span>
-                      <span className="text-[11.5px] font-semibold text-slate-400">USD</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2.5 shrink-0">
-                    {/* Fixed 48px Height + whitespace-nowrap so "Order on Telegram" NEVER breaks into 2 lines */}
-                    <a
-                      href={CONTACT.telegram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group h-12 px-5 inline-flex items-center justify-center gap-2 bg-gradient-to-b from-red-500 to-[#B91C1C] hover:from-red-600 hover:to-[#991b1b] text-white text-[13.5px] font-bold rounded-xl shadow-[0_4px_14px_rgba(220,38,38,0.28)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.38)] transition-all duration-300 whitespace-nowrap shrink-0"
-                    >
-                      <svg className="w-4 h-4 fill-current shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" viewBox="0 0 24 24">
-                        <path d="M21.9 2.6c-.4-.3-1-.4-1.6-.2L2.4 9.3c-.7.3-1.2.9-1.1 1.6.1.7.6 1.2 1.3 1.4l4.6 1.4 10.6-6.7c.2-.1.5 0 .6.2.1.2 0 .4-.1.6l-8.6 7.8v4.6c0 .6.4 1.1 1 1.3.5.1 1.1-.1 1.4-.5l2.6-3.1 4.8 3.5c.4.3.9.4 1.4.2.5-.2.8-.6.9-1.2L22.6 4c.1-.6-.2-1.1-.7-1.4z" />
-                      </svg>
-                      <span>Order on Telegram</span>
-                    </a>
-
-                    {/* Fixed 48px Height WhatsApp Button */}
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group h-12 px-4 inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200/90 hover:border-slate-300 rounded-xl shadow-sm transition-all duration-300 whitespace-nowrap shrink-0"
-                    >
-                      <img
-                        src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/whatsapp/wordmark.svg"
-                        alt="WhatsApp"
-                        className="h-4.5 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* ══════════════════════════════════════════════════════════════════
-            MOBILE & TABLET (<1024px): FULL-VIEW SMART CONFIGURATOR
-           ══════════════════════════════════════════════════════════════════ */}
-        <div className="lg:hidden flex flex-col gap-3">
-          {categoryServices.map((service) => {
-            const isExpanded = activeService.id === service.id;
-            return (
-              <div
-                key={service.id}
-                className={`rounded-[22px] bg-white transition-all duration-300 overflow-hidden ${
-                  isExpanded
-                    ? "shadow-[0_12px_30px_-10px_rgba(220,38,38,0.15)] ring-2 ring-red-500"
-                    : "shadow-sm ring-1 ring-slate-200/80"
-                }`}
-              >
-                {/* Accordion Header Bar */}
-                <button
-                  onClick={() => handleServiceSelect(service)}
-                  className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-3 outline-none"
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span
-                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap ${
-                          isExpanded || service.popular
-                            ? "bg-red-50 text-red-600 border border-red-100"
-                            : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
-                        {service.badge}
-                      </span>
-                      <span className="text-[11px] font-medium text-slate-400 truncate">
-                        {service.tag}
-                      </span>
-                    </div>
-                    <div className="text-[17px] sm:text-[18px] font-sora font-bold text-slate-900 truncate">
-                      {service.title}
-                    </div>
-                  </div>
-
-                  <div className="text-right shrink-0">
-                    <div className="text-[20px] sm:text-[22px] font-extrabold text-slate-900 leading-none">
-                      ${service.unitPrice}
-                    </div>
-                    <div className="text-[10.5px] font-medium text-slate-400 mt-0.5">
-                      /{service.unitLabel}
-                    </div>
-                  </div>
-                </button>
-
-                {/* Accordion Expanded Configurator */}
-                <AnimatePresence initial={false}>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: "easeInOut" }}
-                      className="px-4 sm:px-5 pb-4 sm:pb-5 pt-2 border-t border-slate-100"
-                    >
-                      <p className="text-[13px] sm:text-[14px] text-slate-600 font-medium leading-relaxed mb-3">
-                        {service.desc}
-                      </p>
-
-                      {/* Compact Specs */}
-                      <div className="flex flex-wrap gap-2 mb-3.5 text-[11px] font-semibold">
-                        <span className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/60 text-slate-700">
-                          TLDs: {service.tlds}
-                        </span>
-                        <span className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/60 text-slate-700">
-                          ⏱ {service.turnaround}
-                        </span>
-                      </div>
-
-                      {/* Features */}
-                      <ul className="space-y-1.5 mb-4">
-                        {service.features.map((feat, i) => (
-                          <li key={i} className="flex items-start gap-2 text-[12.5px] sm:text-[13px] font-medium text-slate-700">
-                            <Check className="w-4 h-4 text-red-500 shrink-0 mt-0.5 stroke-[2.5]" />
-                            {feat}
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Traffic Tiers for Mobile (Editorial Guest Post) */}
-                      {service.tiers && (
-                        <div className="mb-4">
-                          <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                            Select Traffic Tier
-                          </div>
-                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
-                            {service.tiers.map((tier, idx) => (
-                              <button
-                                key={tier.label}
-                                onClick={() => setSelectedTierIdx(idx)}
-                                className={`py-1.5 px-2 rounded-lg text-[11px] border ${
-                                  selectedTierIdx === idx
-                                    ? "bg-red-50 border-red-500 text-red-700 font-bold"
-                                    : "bg-slate-50 border-slate-200 text-slate-600"
-                                }`}
-                              >
-                                {tier.label.split(" ")[0]} (${tier.price})
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Mobile Volume Selector */}
-                      <div className="mb-4">
-                        <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                          Select Quantity ({service.unitLabel}s)
-                        </div>
-                        <div className="grid grid-cols-6 gap-1.5">
-                          {service.qtyOptions.map((qty) => (
-                            <button
-                              key={qty}
-                              onClick={() => setSelectedQty(qty)}
-                              className={`py-2 rounded-lg text-[12px] font-bold border ${
-                                selectedQty === qty
-                                  ? "bg-red-600 text-white border-red-600 shadow-sm"
-                                  : "bg-slate-50 text-slate-700 border-slate-200"
-                              }`}
-                            >
-                              {qty >= 1000 ? `${qty / 1000}k` : qty}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Mobile Total + Equal Height Buttons */}
-                      <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-[11px] font-bold text-slate-400 uppercase whitespace-nowrap">
-                            Campaign Total ({selectedQty} {service.unitLabel}s)
-                          </span>
-                          <span className="text-[22px] sm:text-[24px] font-extrabold text-slate-900 leading-none">
-                            ${subtotal} <span className="text-[11px] font-semibold text-slate-400">USD</span>
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2.5">
-                          <a
-                            href={CONTACT.telegram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="h-11 px-3 flex items-center justify-center gap-2 bg-gradient-to-b from-red-500 to-[#B91C1C] text-white text-[13px] font-bold rounded-xl shadow-[0_4px_12px_rgba(220,38,38,0.25)] whitespace-nowrap"
-                          >
-                            <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
-                              <path d="M21.9 2.6c-.4-.3-1-.4-1.6-.2L2.4 9.3c-.7.3-1.2.9-1.1 1.6.1.7.6 1.2 1.3 1.4l4.6 1.4 10.6-6.7c.2-.1.5 0 .6.2.1.2 0 .4-.1.6l-8.6 7.8v4.6c0 .6.4 1.1 1 1.3.5.1 1.1-.1 1.4-.5l2.6-3.1 4.8 3.5c.4.3.9.4 1.4.2.5-.2.8-.6.9-1.2L22.6 4c.1-.6-.2-1.1-.7-1.4z" />
-                            </svg>
-                            <span>Telegram</span>
-                          </a>
-
-                          <a
-                            href={whatsappUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="h-11 px-3 flex items-center justify-center gap-1.5 bg-white border border-slate-200 rounded-xl shadow-sm whitespace-nowrap"
-                          >
-                            <img
-                              src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/whatsapp/wordmark.svg"
-                              alt="WhatsApp"
-                              className="h-4.5 w-auto object-contain"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
-        </div>
 
       </div>
     </section>

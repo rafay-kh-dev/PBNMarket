@@ -104,7 +104,7 @@ const itemVariants = {
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA] px-4 sm:px-6 pt-24 lg:pt-16 pb-12 lg:pb-10 selection:bg-red-100 selection:text-red-900">
+    <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA] px-4 sm:px-6 pt-40 lg:pt-30 pb-12 lg:pb-10 selection:bg-red-100 selection:text-red-900">
       {/* ── Background Grid ── */}
       <div className="pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] sm:[background-size:28px_28px] opacity-70" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_100%_at_50%_50%,transparent_10%,#FAFAFA_100%)]" />
