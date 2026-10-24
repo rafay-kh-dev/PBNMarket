@@ -157,17 +157,19 @@ export const Header = () => {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="flex items-center gap-2.5 group outline-none shrink-0"
             >
-              <img
-                src="/favicon.svg"
-                alt="PBNMarket"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-[0_4px_12px_rgba(220,38,38,0.25)] group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="flex items-baseline">
-                <span className="text-[19px] sm:text-[21px] font-sora font-extrabold text-slate-800 tracking-tight">
-                  PBN<span className="text-red-600">Market</span>
+              <div className="flex flex-col items-center justify-center gap-1">
+                <img
+                  src="/favicon.svg"
+                  alt="PBNMarket"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl shadow-[0_4px_12px_rgba(220,38,38,0.25)] group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="flex flex-col items-end leading-none text-right">
+                <span className="text-[18px] sm:text-[22px] font-sora font-extrabold text-slate-800 tracking-[-0.04em]">
+                  Jasa Backlinks
                 </span>
-                <span className="hidden sm:inline-block ml-2 px-2 py-0.5 rounded-full bg-red-50 border border-red-100 text-[9.5px] font-bold text-red-600 uppercase tracking-widest">
-                  DR 50+
+                <span className="mt-1 text-[9px] sm:text-[10px] font-medium tracking-[0.01em] text-red-600">
+                  Powered by SeoHub Ltd
                 </span>
               </div>
             </a>
