@@ -331,14 +331,20 @@ const ServiceCard = ({ service, isHighlighted }) => {
     maximumFractionDigits: 2,
   });
 
+  // 🚀 WhatsApp & Telegram Pre-filled Message Logic
   const orderMessage = encodeURIComponent(
     `Hi PBNMarket Team! I'd like to order:\n\n• Package: ${service.title}\n` +
       (service.tiers ? `• Tier: ${service.tiers[tierIdx].label}\n` : ``) +
       `• Quantity: ${qty} ${service.unitLabel}s\n• Rate: $${activeUnitPrice}/${service.unitLabel}\n• Total: $${subtotal} USD\n\nPlease share the next steps.`,
   );
+
   const whatsappUrl = CONTACT.whatsapp.includes("?")
     ? `${CONTACT.whatsapp}&text=${orderMessage}`
     : `${CONTACT.whatsapp}?text=${orderMessage}`;
+
+  const telegramUrl = CONTACT.telegram.includes("?")
+    ? `${CONTACT.telegram}&text=${orderMessage}`
+    : `${CONTACT.telegram}?text=${orderMessage}`;
 
   const handlePreset = (q) => {
     setQty(q);
@@ -351,7 +357,6 @@ const ServiceCard = ({ service, isHighlighted }) => {
   };
   const isFlagship = service.isFlagship;
 
-  // Reduced motion support and optimized spring settings
   const cardVariants = {
     hidden: { opacity: 0, y: 30, scale: 0.98 },
     visible: {
@@ -366,7 +371,6 @@ const ServiceCard = ({ service, isHighlighted }) => {
     <motion.div
       variants={cardVariants}
       id={`service-card-${service.id}`}
-      /* 🚀 FIXED: Standardized radii (rounded-3xl), slate shadows, and duration-300 */
       className={`group relative bg-white rounded-3xl p-5 sm:p-7 transition-all duration-300 ${
         isFlagship
           ? "lg:col-span-3 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-center shadow-[0_10px_35px_-12px_rgba(15,23,42,0.06)] ring-1 ring-slate-200/90 hover:ring-red-200"
@@ -547,8 +551,9 @@ const ServiceCard = ({ service, isHighlighted }) => {
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
+            {/* 🚀 Telegram CTA with pre-filled message URL */}
             <a
-              href={CONTACT.telegram}
+              href={telegramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group/btn h-[48px] flex items-center justify-center gap-1.5 bg-gradient-to-b from-red-500 to-[#B91C1C] hover:from-red-600 hover:to-[#991b1b] text-white text-[13.5px] font-bold rounded-xl shadow-[0_4px_12px_rgba(220,38,38,0.25)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
@@ -556,6 +561,8 @@ const ServiceCard = ({ service, isHighlighted }) => {
               <TelegramIcon className="w-4 h-4 shrink-0 group-hover/btn:-translate-y-0.5 transition-transform" />
               <span>Telegram</span>
             </a>
+
+            {/* WhatsApp CTA with pre-filled message URL */}
             <a
               href={whatsappUrl}
               target="_blank"
@@ -592,39 +599,34 @@ export const Services = () => {
         setActiveTab(targetCategory);
       }
 
-      if (targetServiceId) {
-        let attempts = 0;
-        const finder = setInterval(() => {
+      setTimeout(() => {
+        if (targetServiceId) {
           const cardEl = document.getElementById(
             `service-card-${targetServiceId}`,
           );
-          if (cardEl && document.body.style.overflow !== "hidden") {
-            clearInterval(finder);
-            setTimeout(() => {
-              const headerOffset = window.innerWidth < 640 ? 140 : 150;
-              const top =
-                cardEl.getBoundingClientRect().top +
-                window.scrollY -
-                headerOffset;
-              window.scrollTo({ top, behavior: "smooth" });
-              setHighlightedId(targetServiceId);
-              setTimeout(() => setHighlightedId(null), 2500);
-            }, 100);
-          }
-          attempts++;
-          if (attempts > 30) clearInterval(finder);
-        }, 100);
-      } else {
-        setTimeout(() => {
-          if (gridTopRef.current) {
+          if (cardEl) {
+            const headerOffset = window.innerWidth < 640 ? 140 : 150;
             const top =
-              gridTopRef.current.getBoundingClientRect().top +
+              cardEl.getBoundingClientRect().top +
               window.scrollY -
-              145;
+              headerOffset;
+            window.scrollTo({ top, behavior: "smooth" });
+
+            setHighlightedId(targetServiceId);
+            setTimeout(() => setHighlightedId(null), 2500);
+          }
+        } else {
+          const sectionEl = document.getElementById("services");
+          if (sectionEl) {
+            const headerOffset = window.innerWidth < 640 ? 80 : 100;
+            const top =
+              sectionEl.getBoundingClientRect().top +
+              window.scrollY -
+              headerOffset;
             window.scrollTo({ top, behavior: "smooth" });
           }
-        }, 150);
-      }
+        }
+      }, 500);
     };
 
     window.addEventListener("navigateToService", handleNavigate);
@@ -637,15 +639,15 @@ export const Services = () => {
 
   const handleTabChange = (catId) => {
     setActiveTab(catId);
-    if (gridTopRef.current) {
-      setTimeout(() => {
-        const rect = gridTopRef.current.getBoundingClientRect();
-        window.scrollTo({
-          top: window.scrollY + rect.top - 145,
-          behavior: "smooth",
-        });
-      }, 150);
-    }
+    setTimeout(() => {
+      const sectionEl = document.getElementById("services");
+      if (sectionEl) {
+        const headerOffset = window.innerWidth < 640 ? 80 : 100;
+        const top =
+          sectionEl.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }, 500);
   };
 
   const displayedServices = servicesData.filter(
@@ -672,7 +674,6 @@ export const Services = () => {
 
       <div className="relative z-10 max-w-[1280px] mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-          {/* 🚀 FIXED: Fluid typographic clamp applied to the Section Heading */}
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
