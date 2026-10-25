@@ -1,31 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Premium Deep Red Background Gradient -->
-    <linearGradient id="bgRed" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- PBNMarket Signature Red Gradient -->
+    <linearGradient id="brandRed" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#EF4444" />
-      <stop offset="35%" stop-color="#DC2626" />
-      <stop offset="100%" stop-color="#7F1D1D" />
+      <stop offset="50%" stop-color="#DC2626" />
+      <stop offset="100%" stop-color="#991B1B" />
     </linearGradient>
-
-    <!-- Glowing SaaS Drop Shadow -->
-    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#450a0a" flood-opacity="0.5" />
+    
+    <!-- Clean Silver-White Gradient for the P -->
+    <linearGradient id="iconWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F1F5F9" />
+    </linearGradient>
+    
+    <!-- Subtle SaaS Drop Shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#7F1D1D" flood-opacity="0.4" />
     </filter>
   </defs>
 
-  <!-- Base Apple-Style Squircle Background -->
-  <rect width="512" height="512" rx="120" fill="url(#bgRed)" />
+  <!-- Apple-Style Smooth Rounded Squircle Background -->
+  <rect width="512" height="512" rx="120" fill="url(#brandRed)" />
 
-  <!-- The Engineered "Tech P" Group -->
-  <!-- Skewed slightly to the right to represent Speed & Rankings Going UP -->
-  <g filter="url(#neonGlow)" transform="translate(15, 0) skewX(-6)">
-    
-    <!-- The Angular Open-Loop 'P' -->
-    <path d="M 160 380 V 140 H 260 L 340 220 V 240 L 260 320 H 220" fill="none" stroke="#FFFFFF" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" />
-    
-    <!-- The Hovering Network Node (Precision Laser Cut Gap) -->
-    <!-- Positioned exactly where the top-right corner would be, creating a beautiful negative space gap -->
-    <circle cx="340" cy="140" r="26" fill="#FFFFFF" />
-    
-  </g>
+  <!-- Ultra-Minimalist Geometric 'P' Mark -->
+  <path d="M 168 370 V 150 H 268 A 75 75 0 0 1 268 300 H 168" fill="none" stroke="url(#iconWhite)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" filter="url(#shadow)" />
 </svg>
